@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.room.common.jvm)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -49,6 +50,9 @@ dependencies {
     implementation("androidx.camera:camera-camera2:1.4.0")
     implementation("androidx.camera:camera-view:1.4.0")
     implementation("androidx.camera:camera-lifecycle:1.4.0")
+
+// WorkManager (Background expiry checker)
+    implementation("androidx.work:work-runtime:2.9.0")
 
 //  Room (The database) is an SQLite wrapper
     implementation("androidx.room:room-runtime:2.6.1")
