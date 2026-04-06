@@ -55,8 +55,8 @@ dependencies {
     implementation("androidx.work:work-runtime:2.9.0")
 
 //  Room (The database) is an SQLite wrapper
-    implementation("androidx.room:room-runtime:2.6.1")
-    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-runtime:2.7.0")
+    annotationProcessor("androidx.room:room-compiler:2.7.0")
 
 //    Retrofit (OpenFoodFacts) API turns barcode (102992) into it's equivalent product name and details
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

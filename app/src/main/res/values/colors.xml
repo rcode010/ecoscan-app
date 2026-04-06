@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="primary">#2D6A4F</color>
+    <color name="primary_light">#52B788</color>
+    <color name="primary_dark">#1B4332</color>
+    <color name="background">#F8F9FA</color>
+    <color name="card_white">#FFFFFF</color>
+    <color name="text_dark">#1B1B1B</color>
+    <color name="text_grey">#6C757D</color>
+    <color name="expired_red">#E63946</color>
+    <color name="warning_yellow">#F4A261</color>
+    <color name="safe_green">#52B788</color>
+    <color name="white">#FFFFFF</color>
 </resources>
