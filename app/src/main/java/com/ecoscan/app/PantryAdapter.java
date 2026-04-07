@@ -1,5 +1,6 @@
 package com.ecoscan.app;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,23 +42,25 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
         long daysLeft = TimeUnit.MILLISECONDS.toDays(diff);
 
         if (daysLeft < 0) {
-            // Expired
             holder.chipExpiry.setText("Expired");
             holder.chipExpiry.setChipBackgroundColorResource(R.color.expired_red);
             holder.expiryIndicator.setBackgroundColor(Color.parseColor("#E63946"));
-
         } else if (daysLeft <= 2) {
-            // Warning
             holder.chipExpiry.setText("Expires in " + daysLeft + " day(s)");
             holder.chipExpiry.setChipBackgroundColorResource(R.color.warning_yellow);
             holder.expiryIndicator.setBackgroundColor(Color.parseColor("#F4A261"));
-
         } else {
-            // Safe
             holder.chipExpiry.setText(daysLeft + " days left");
             holder.chipExpiry.setChipBackgroundColorResource(R.color.safe_green);
             holder.expiryIndicator.setBackgroundColor(Color.parseColor("#52B788"));
         }
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
+            v.getContext().startActivity(intent);
+        });
+
+
     }
 
     @Override
