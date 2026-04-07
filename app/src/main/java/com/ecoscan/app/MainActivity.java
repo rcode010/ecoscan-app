@@ -1,5 +1,6 @@
 package com.ecoscan.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,10 +29,10 @@ public class MainActivity extends AppCompatActivity {
 
         // FAB → go to scan screen
         ExtendedFloatingActionButton fab = findViewById(R.id.fab_scan);
-//        fab.setOnClickListener(v -> {
-//            Intent intent = new Intent(MainActivity.this, AddProductActivity.class);
-//            startActivity(intent);
-//        });
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ScanActivity.class);
+            startActivity(intent);
+        });
     }
 
     private List<PantryItem> getFakeData() {
