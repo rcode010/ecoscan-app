@@ -1,15 +1,9 @@
 package com.ecoscan.app;
 
-import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.ecoscan.app.data.PantryItem;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import java.util.ArrayList;
-import java.util.List;
+import androidx.fragment.app.Fragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,41 +12,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_pantry);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // Load HomeFragment by default
+        loadFragment(new HomeFragment());
 
-        // Load fake data for UI demo
-        List<PantryItem> itemList = getFakeData();
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
 
-        PantryAdapter adapter = new PantryAdapter(itemList);
-        recyclerView.setAdapter(adapter);
-
-        // FAB → go to scan screen
-        ExtendedFloatingActionButton fab = findViewById(R.id.fab_scan);
-        fab.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ScanActivity.class);
-            startActivity(intent);
+            if (id == R.id.nav_home) {
+                loadFragment(new HomeFragment());
+            } else if (id == R.id.nav_scan) {
+                loadFragment(new ScanFragment());
+            } else if (id == R.id.nav_notifications) {
+                loadFragment(new NotificationsFragment());
+            } else if (id == R.id.nav_profile) {
+                loadFragment(new ProfileFragment());
+            }
+            return true;
         });
     }
 
-    private List<PantryItem> getFakeData() {
-        List<PantryItem> items = new ArrayList<>();
-
-        long now = System.currentTimeMillis();
-        long oneDay = 24 * 60 * 60 * 1000L;
-
-        // Safe items
-        items.add(new PantryItem("Whole Milk", "012345678901", now + 7 * oneDay));
-        items.add(new PantryItem("Orange Juice", "098765432109", now + 10 * oneDay));
-        items.add(new PantryItem("Greek Yogurt", "011223344556", now + 5 * oneDay));
-
-        // Warning items (expiring soon)
-        items.add(new PantryItem("Cheddar Cheese", "019283746501", now + 2 * oneDay));
-        items.add(new PantryItem("Fresh Bread", "018273645501", now + 1 * oneDay));
-
-        // Expired items
-        items.add(new PantryItem("Strawberries", "017263545501", now - 1 * oneDay));
-
-        return items;
+    private void loadFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
     }
 }
