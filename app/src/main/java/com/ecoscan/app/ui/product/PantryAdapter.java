@@ -1,4 +1,4 @@
-package com.ecoscan.app;
+package com.ecoscan.app.ui.product;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,7 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ecoscan.app.data.PantryItem;
+import com.ecoscan.app.R;
+import com.ecoscan.app.data.Pantry.PantryItem;
 import com.google.android.material.chip.Chip;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -59,8 +60,6 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
             v.getContext().startActivity(intent);
         });
-
-
     }
 
     @Override

@@ -1,6 +1,5 @@
-package com.ecoscan.app;
+package com.ecoscan.app.ui.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,16 +9,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
-import com.ecoscan.app.data.PantryItem;
+
+import com.ecoscan.app.ui.product.PantryAdapter;
+import com.ecoscan.app.R;
+import com.ecoscan.app.data.Pantry.PantryItem;
 
 public class HomeFragment extends Fragment {
 
+    // onCreateView creates the UI (home fragment) | converting the XML to View objects
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
+    // onViewCreated uses the UI that was created by onCreateView to populate it with data
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -32,6 +35,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
+    // Helper method to generate dummy data
     private List<PantryItem> getFakeData() {
         List<PantryItem> items = new ArrayList<>();
         long now = System.currentTimeMillis();

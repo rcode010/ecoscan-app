@@ -1,8 +1,10 @@
-package com.ecoscan.app;
+package com.ecoscan.app.ui.product;
 
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.ecoscan.app.R;
 import com.google.android.material.button.MaterialButton;
 
 public class ProductDetailActivity extends AppCompatActivity {

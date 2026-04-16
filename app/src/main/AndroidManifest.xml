@@ -20,7 +20,7 @@
         android:theme="@style/Theme.EcoScan">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,11 +28,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AddProductActivity"
+        <activity android:name=".ui.product.AddProductActivity"
             android:exported="false" />
         <activity android:name=".ScanActivity"
             android:exported="false" />
-        <activity android:name=".ProductDetailActivity"
+        <activity android:name=".ui.product.ProductDetailActivity"
             android:exported="false" />
     </application>
 

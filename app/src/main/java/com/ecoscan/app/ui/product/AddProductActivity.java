@@ -1,9 +1,11 @@
-package com.ecoscan.app;
+package com.ecoscan.app.ui.product;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.ecoscan.app.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import java.util.Calendar;

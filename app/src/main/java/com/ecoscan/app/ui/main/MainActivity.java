@@ -1,10 +1,18 @@
-package com.ecoscan.app;
+package com.ecoscan.app.ui.main;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
+import com.ecoscan.app.ui.profile.ProfileFragment;
+import com.ecoscan.app.R;
+import com.ecoscan.app.ui.scan.ScanFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * MainActivity is a host that holds all fragments and their FrameLayout container.
+ * It controls which fragment to render based on the bottom navigation menu.
+ * */
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -32,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Helper method to load fragments
     private void loadFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()

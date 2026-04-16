@@ -1,4 +1,4 @@
-package com.ecoscan.app;
+package com.ecoscan.app.ui.scan;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
+
+import com.ecoscan.app.R;
+import com.ecoscan.app.ui.product.AddProductActivity;
 import com.google.android.material.button.MaterialButton;
 
 public class ScanFragment extends Fragment {

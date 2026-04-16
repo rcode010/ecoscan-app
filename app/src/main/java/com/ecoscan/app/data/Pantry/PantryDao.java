@@ -1,4 +1,4 @@
-package com.ecoscan.app.data;
+package com.ecoscan.app.data.Pantry;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
