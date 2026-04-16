@@ -4,6 +4,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.ecoscan.app.data.EcoScanDatabase;
+import com.ecoscan.app.data.User.User;
 import com.ecoscan.app.ui.profile.ProfileFragment;
 import com.ecoscan.app.R;
 import com.ecoscan.app.ui.scan.ScanFragment;
@@ -19,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Create EcoScanUser if it doesn't exist during initial startup
+        insertUserIfNotExist();
 
         // Load HomeFragment by default
         loadFragment(new HomeFragment());
@@ -38,6 +43,15 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+    }
+
+    private void insertUserIfNotExist() {
+        EcoScanDatabase db = EcoScanDatabase.getInstance(this);
+        User existingUser = db.userDao().getUser().getValue();
+
+        if (existingUser == null) {
+            db.userDao().insert(new User("EcoScan User"));
+        }
     }
 
     // Helper method to load fragments
