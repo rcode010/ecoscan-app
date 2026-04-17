@@ -11,6 +11,9 @@ import com.ecoscan.app.R;
 import com.ecoscan.app.ui.scan.ScanFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * MainActivity is a host that holds all fragments and their FrameLayout container.
  * It controls which fragment to render based on the bottom navigation menu.
@@ -22,12 +25,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create EcoScanUser if it doesn't exist during initial startup
+        // Create EcoScanUser if it doesn't exist at first startup
         insertUserIfNotExist();
 
         // Load HomeFragment by default
         loadFragment(new HomeFragment());
 
+        // Set up bottom navigation menu with listeners
+        setupBottomNavigation();
+    }
+
+    private void setupBottomNavigation() {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
@@ -46,12 +54,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void insertUserIfNotExist() {
-        EcoScanDatabase db = EcoScanDatabase.getInstance(this);
-        User existingUser = db.userDao().getUser().getValue();
+        /* *
+         * executor on the following line is a thread used to run database queries.
+         * Running database queries directly on the main thread causes bugs
+         * The Room database enforces this behavior because in android apps the main thread is dedicated for ui only.
+         * Running queries on the main thread causes the UI to freeze.
+         * */
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute((() -> {
+            EcoScanDatabase db = EcoScanDatabase.getInstance(this);
+            User existingUser = db.userDao().getUser();
 
-        if (existingUser == null) {
-            db.userDao().insert(new User("EcoScan User"));
-        }
+            if (existingUser == null) {
+                db.userDao().insert(new User("EcoScan User"));
+            }
+        }));
     }
 
     // Helper method to load fragments

@@ -23,6 +23,11 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
         this.items = items;
     }
 
+    public void updateItems(List<PantryItem> items) {
+        this.items = items;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -12,5 +12,5 @@ public interface UserDao {
     void insert(User user);
 
     @Query("SELECT * FROM user")
-    LiveData<User> getUser();
+    User getUser();
 }
