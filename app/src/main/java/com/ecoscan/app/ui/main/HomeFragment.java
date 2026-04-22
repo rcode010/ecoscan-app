@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
 
         /*
          * On the following line when we create a db instance,
-         * We can't pass in `this` because the current class (Fragment) is NOT a context.
+         * We can't pass in `this` because the current class (Fragment) is NOT considered a context.
          * Calling requireContext() returns the context of the Activity class that this fragment is attached to.
          * */
         EcoScanDatabase db = EcoScanDatabase.getInstance(requireContext());
@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
 
         /* *
         * We'll pass in empty list initially to the adapter to avoid crashing
-        * Becuase when the onViewCreated() finishes the data isn't yet fetched and is null
+        * Because when the onViewCreated() finishes the data isn't yet fetched and is null
         * Passing null to the adapter would cause issues
         * */
         PantryAdapter adapter = new PantryAdapter(new ArrayList<>());
