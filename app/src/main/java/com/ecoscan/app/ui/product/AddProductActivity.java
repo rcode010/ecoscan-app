@@ -6,13 +6,19 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ecoscan.app.R;
+import com.ecoscan.app.data.EcoScanDatabase;
+import com.ecoscan.app.data.Pantry.PantryItem;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class AddProductActivity extends AppCompatActivity {
 
     private TextInputEditText etProductName, etBarcode, etExpiryDate;
+    EcoScanDatabase db;
     private long selectedExpiryDate = 0;
 
     @Override
@@ -20,6 +26,7 @@ public class AddProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
 
+        db = EcoScanDatabase.getInstance(this);
         etProductName = findViewById(R.id.et_product_name);
         etBarcode = findViewById(R.id.et_barcode);
         etExpiryDate = findViewById(R.id.et_expiry_date);
@@ -49,7 +56,16 @@ public class AddProductActivity extends AppCompatActivity {
                 return;
             }
 
-            // Success for now (database integration comes later)
+            /*
+            * Executor is a thread used to run database queries as mentioned in MainActivity.java
+            * We always run database queries on a different thread than the main thread to avoid crashing the app.
+            * */
+            Executor executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+                PantryItem newItem = new PantryItem(name, "", selectedExpiryDate);
+                db.pantryDao().insert(newItem);
+            });
+
             Toast.makeText(this, "✅ " + name + " added to pantry!", Toast.LENGTH_SHORT).show();
             finish();
         });
