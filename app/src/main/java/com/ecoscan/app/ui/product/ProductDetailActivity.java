@@ -10,6 +10,10 @@ import com.ecoscan.app.data.EcoScanDatabase;
 import com.ecoscan.app.data.Pantry.PantryItem;
 import com.google.android.material.button.MaterialButton;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class ProductDetailActivity extends AppCompatActivity {
 
     @Override
@@ -38,8 +42,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         tvName.setText(item.itemName);
         tvBarcode.setText(item.barcode);
-        tvDateAdded.setText(Math.toIntExact(item.dateAdded));
-        tvExpiryDate.setText(Math.toIntExact(item.expiryDate));
+        tvDateAdded.setText(formatDate(item.dateAdded));
+        tvExpiryDate.setText(formatDate(item.expiryDate));
 
         // Delete button
         MaterialButton btnDelete = findViewById(R.id.btn_delete);
@@ -48,6 +52,11 @@ public class ProductDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Product removed!", Toast.LENGTH_SHORT).show();
             finish();
         });
+    }
+
+    private String formatDate(long date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        return sdf.format(new Date(date));
     }
 
     @Override
