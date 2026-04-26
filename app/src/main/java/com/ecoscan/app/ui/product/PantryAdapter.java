@@ -1,7 +1,9 @@
 package com.ecoscan.app.ui.product;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,11 +40,13 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
     }
 
     // Binds the data to the ViewHolder
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PantryItem item = items.get(position);
 
         // Set the TextViews data
+        holder.id = item.id;
         holder.tvName.setText(item.itemName);
         holder.tvBarcode.setText("Barcode: " + item.barcode);
 
@@ -70,7 +74,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
             Intent intent = new Intent(v.getContext(), ProductDetailActivity.class);
 
             // Pass in the item to the detail activity
-            intent.putExtra("item", item.toString());
+            intent.putExtra("item", item);
 
             v.getContext().startActivity(intent);
         });
@@ -102,6 +106,8 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
         → onBindViewHolder()    ×1    (reuses item[1]'s ViewHolder, binds item[11])
      * */
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        // id
+        int id;
         TextView tvName, tvBarcode;
         Chip chipExpiry;
         View expiryIndicator;
@@ -109,6 +115,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
         // Constructor to initialize the views once
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            id = itemView.getId();
             tvName = itemView.findViewById(R.id.tv_product_name);
             tvBarcode = itemView.findViewById(R.id.tv_barcode);
             chipExpiry = itemView.findViewById(R.id.chip_expiry);
