@@ -45,7 +45,7 @@ public class AddProductActivity extends AppCompatActivity {
         MaterialButton btnAdd = findViewById(R.id.btn_add_product);
         btnAdd.setOnClickListener(v -> {
             String name = etProductName.getText().toString().trim();
-            String barcode = etBarcode.getText().toString().trim();
+//            String barcode = etBarcode.getText().toString().trim();
 
             if (name.isEmpty()) {
                 etProductName.setError("Enter product name");
@@ -67,6 +67,8 @@ public class AddProductActivity extends AppCompatActivity {
             });
 
             Toast.makeText(this, "✅ " + name + " added to pantry!", Toast.LENGTH_SHORT).show();
+
+
             finish();
         });
     }

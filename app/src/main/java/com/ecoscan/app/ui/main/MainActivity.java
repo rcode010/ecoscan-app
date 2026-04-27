@@ -1,9 +1,13 @@
 package com.ecoscan.app.ui.main;
 
 import android.os.Bundle;
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.ecoscan.app.api.ApiService;
+import com.ecoscan.app.api.RetrofitClient;
 import com.ecoscan.app.data.EcoScanDatabase;
 import com.ecoscan.app.data.User.User;
 import com.ecoscan.app.ui.profile.ProfileFragment;
@@ -11,8 +15,17 @@ import com.ecoscan.app.R;
 import com.ecoscan.app.ui.scan.ScanFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * MainActivity is a host that holds all fragments and their FrameLayout container.
@@ -33,6 +46,30 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up bottom navigation menu with listeners
         setupBottomNavigation();
+
+        String barcode = "5449000221780";
+        ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
+        apiService.getProduct(barcode).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    try {
+                        String result = response.body().string();
+                        JSONObject json = new JSONObject(result);
+                        Log.d("RESPONSE", json.toString(4));                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("ERROR",t.getMessage());
+            }
+        });
+
     }
 
     private void setupBottomNavigation() {

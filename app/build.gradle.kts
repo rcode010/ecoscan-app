@@ -38,6 +38,7 @@ android {
 dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
+
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.room.common.jvm)
@@ -60,6 +61,9 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:2.7.0")
 
 //    Retrofit (OpenFoodFacts) API turns barcode (102992) into it's equivalent product name and details
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+//  for making api call
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }
