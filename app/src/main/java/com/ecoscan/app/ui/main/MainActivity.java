@@ -56,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         String result = response.body().string();
                         JSONObject json = new JSONObject(result);
-                        Log.d("RESPONSE", json.toString(4));                    } catch (IOException e) {
+                        Log.d("RESPONSE", json.toString(4));
+                    } catch (IOException e) {
                         throw new RuntimeException(e);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
