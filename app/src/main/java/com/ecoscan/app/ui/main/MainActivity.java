@@ -10,6 +10,7 @@ import com.ecoscan.app.api.ApiService;
 import com.ecoscan.app.api.RetrofitClient;
 import com.ecoscan.app.data.EcoScanDatabase;
 import com.ecoscan.app.data.User.User;
+import com.ecoscan.app.model.ApiResponse;
 import com.ecoscan.app.ui.profile.ProfileFragment;
 import com.ecoscan.app.R;
 import com.ecoscan.app.ui.scan.ScanFragment;
@@ -19,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -49,24 +51,26 @@ public class MainActivity extends AppCompatActivity {
 
         String barcode = "5449000221780";
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        apiService.getProduct(barcode).enqueue(new Callback<ResponseBody>() {
+        apiService.getProduct(barcode).enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if(response.isSuccessful()){
                     try {
-                        String result = response.body().string();
-                        JSONObject json = new JSONObject(result);
-                        Log.d("RESPONSE", json.toString(4));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        if (response.isSuccessful() && response.body() != null) {
+                            ApiResponse apiResponse = response.body();
+
+                            if (apiResponse.getStatus() == 1) {
+                                Log.d("RESPONSE", apiResponse.toString());
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e("ERROR", e.getMessage());
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.e("ERROR",t.getMessage());
             }
         });
