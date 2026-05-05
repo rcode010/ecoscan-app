@@ -13,6 +13,8 @@ import com.google.android.material.button.MaterialButton;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
@@ -48,7 +50,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Delete button
         MaterialButton btnDelete = findViewById(R.id.btn_delete);
         btnDelete.setOnClickListener(v -> {
-            db.pantryDao().delete(item);
+            Executor executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+                db.pantryDao().delete(item);
+            });
+
             Toast.makeText(this, "Product removed!", Toast.LENGTH_SHORT).show();
             finish();
         });
