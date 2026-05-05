@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import com.ecoscan.app.R;
 import com.ecoscan.app.api.ApiService;
 import com.ecoscan.app.api.RetrofitClient;
+import com.ecoscan.app.model.ApiResponse;
 import com.ecoscan.app.ui.product.AddProductActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -72,26 +73,27 @@ public class ScanFragment extends Fragment {
 
         String barcode = "5449000221780";
         ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        apiService.getProduct(barcode).enqueue(new Callback<ResponseBody>() {
+        apiService.getProduct(barcode).enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                    try {
-                        String result = response.body().string();
-                        item= new JSONObject(result);
-
-//                        Log.d("RESPONSE", json.toString(4));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
+            public void onResponse(@NonNull Call<ApiResponse> call, @NonNull Response<ApiResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ApiResponse apiResponse = response.body();
+                    
+                    if (apiResponse.getStatus() == 1) {
+                        Log.d("RESPONSE", apiResponse.toString());
+                        // Initialize 'item' if needed for the manual entry button
+                        try {
+                            item = new JSONObject(new com.google.gson.Gson().toJson(apiResponse));
+                        } catch (JSONException e) {
+                            Log.e("ERROR", "Failed to parse API response to JSONObject", e);
+                        }
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("ERROR",t.getMessage());
+            public void onFailure(@NonNull Call<ApiResponse> call, @NonNull Throwable t) {
+                Log.e("ERROR", t.getMessage() != null ? t.getMessage() : "Network call failed");
             }
         });
     }
