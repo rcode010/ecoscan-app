@@ -47,29 +47,7 @@ public class MainActivity extends AppCompatActivity {
         // Set up bottom navigation menu with listeners
         setupBottomNavigation();
 
-        String barcode = "5449000221780";
-        ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
-        apiService.getProduct(barcode).enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                    try {
-                        String result = response.body().string();
-                        JSONObject json = new JSONObject(result);
-                        Log.d("RESPONSE", json.toString(4));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("ERROR",t.getMessage());
-            }
-        });
 
     }
 

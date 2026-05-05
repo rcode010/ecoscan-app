@@ -2,14 +2,20 @@ package com.ecoscan.app.ui.product;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.ecoscan.app.R;
 import com.ecoscan.app.data.EcoScanDatabase;
 import com.ecoscan.app.data.Pantry.PantryItem;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.Executor;
@@ -18,6 +24,7 @@ import java.util.concurrent.Executors;
 public class AddProductActivity extends AppCompatActivity {
 
     private TextInputEditText etProductName, etBarcode, etExpiryDate;
+    private ImageView imageView;
     EcoScanDatabase db;
     private long selectedExpiryDate = 0;
 
@@ -26,10 +33,18 @@ public class AddProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
 
-        db = EcoScanDatabase.getInstance(this);
+
+
+
+
+
+
+            db = EcoScanDatabase.getInstance(this);
         etProductName = findViewById(R.id.et_product_name);
         etBarcode = findViewById(R.id.et_barcode);
         etExpiryDate = findViewById(R.id.et_expiry_date);
+        imageView = findViewById(R.id.imageView);
+
 
         // Back button
         findViewById(R.id.toolbar);
@@ -37,6 +52,31 @@ public class AddProductActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        // get data of the barcode scan:
+        String itemJson = getIntent().getStringExtra("data");
+        if (itemJson != null) {
+            try {
+                JSONObject item = new JSONObject(itemJson);
+                JSONObject product = item.getJSONObject("product");
+                etProductName.setText(product.optString("product_name", ""));
+                etBarcode.setText(item.optString("code", ""));
+
+                // Get image URL
+                JSONObject display = product.getJSONObject("selected_images")
+                        .getJSONObject("front")
+                        .getJSONObject("display");
+                String langKey = display.keys().next();
+                String imageUrl = display.getString(langKey);
+
+                Glide.with(this).load(imageUrl).into(imageView);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
 
         // Date picker on expiry field click
         etExpiryDate.setOnClickListener(v -> showDatePicker());
@@ -71,6 +111,9 @@ public class AddProductActivity extends AppCompatActivity {
 
             finish();
         });
+
+
+
     }
 
     private void showDatePicker() {
