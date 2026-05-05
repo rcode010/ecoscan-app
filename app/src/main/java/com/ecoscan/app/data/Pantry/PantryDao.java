@@ -27,7 +27,7 @@ public interface PantryDao {
 
     // Get items expiring within 2 days (for notifications)
     @Query("SELECT * FROM pantry_item WHERE expiryDate <= :twoDaysFromNow AND isExpired = 0")
-    List<PantryItem> getItemsExpiringSoon(long twoDaysFromNow);
+    LiveData<List<PantryItem>> getItemsExpiringSoon(long twoDaysFromNow);
 
     // Get already expired items
     @Query("SELECT * FROM pantry_item WHERE expiryDate < :now AND isExpired = 0")

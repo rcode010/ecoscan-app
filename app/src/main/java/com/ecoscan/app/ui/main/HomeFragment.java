@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import com.ecoscan.app.data.EcoScanDatabase;
 import com.ecoscan.app.ui.product.PantryAdapter;
@@ -18,6 +20,7 @@ import com.ecoscan.app.R;
 import com.ecoscan.app.data.Pantry.PantryItem;
 
 public class HomeFragment extends Fragment {
+    private EcoScanDatabase db;
 
     // onCreateView creates the UI (home fragment) | converts the XML to View java objects
     @Override
@@ -35,7 +38,10 @@ public class HomeFragment extends Fragment {
          * We can't pass in `this` because the current class (Fragment) is NOT considered a context.
          * Calling requireContext() returns the context of the Activity class that this fragment is attached to.
          * */
-        EcoScanDatabase db = EcoScanDatabase.getInstance(requireContext());
+        db = EcoScanDatabase.getInstance(requireContext());
+        long twoDaysFromNow = System.currentTimeMillis() + (2 * 24 * 60 * 60 * 1000);
+        TextView totalItemsStat = view.findViewById(R.id.totalItemsStat);
+        TextView expiringSoonStat = view.findViewById(R.id.expiringSoonStat);
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_pantry);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -59,7 +65,22 @@ public class HomeFragment extends Fragment {
          * NOTE: udpateItems() is a method of the class PantryAdapter
          * */
         db.pantryDao().getAllItems().observe(getViewLifecycleOwner(), items -> {
-            adapter.updateItems(items);
+            if (items != null) {
+                adapter.updateItems(items);
+                setStatCardValue(totalItemsStat, items.size());
+            }
         });
+
+        db.pantryDao().getItemsExpiringSoon(twoDaysFromNow).observe(getViewLifecycleOwner(), items -> {
+            if (items != null) {
+                setStatCardValue(expiringSoonStat, items.size());
+            }
+        });
+    }
+
+    // A dynamic helper function to set a value to a status card
+    private void setStatCardValue(TextView textView, int value) {
+        String text = String.valueOf(value);
+        textView.setText(text);
     }
 }
