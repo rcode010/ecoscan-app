@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("ERROR",t.getMessage());
             }
         });
-
     }
 
     private void setupBottomNavigation() {

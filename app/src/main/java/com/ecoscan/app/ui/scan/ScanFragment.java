@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +23,24 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.ecoscan.app.R;
+import com.ecoscan.app.api.ApiService;
+import com.ecoscan.app.api.RetrofitClient;
 import com.ecoscan.app.ui.product.AddProductActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.common.util.concurrent.ListenableFuture;
 
-public class ScanFragment extends Fragment {
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ScanFragment extends Fragment {
+    JSONObject item;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,6 +55,7 @@ public class ScanFragment extends Fragment {
         if (btnManual != null) {
             btnManual.setOnClickListener(v -> {
                 Intent intent = new Intent(requireContext(), AddProductActivity.class);
+                intent.putExtra("data", item.toString()); // pass as String
                 startActivity(intent);
             });
         }
@@ -53,6 +68,32 @@ public class ScanFragment extends Fragment {
             PreviewView previewView = view.findViewById(R.id.camera_preview);
             startCamera(previewView);
         }
+
+
+        String barcode = "5449000221780";
+        ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
+        apiService.getProduct(barcode).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    try {
+                        String result = response.body().string();
+                        item= new JSONObject(result);
+
+//                        Log.d("RESPONSE", json.toString(4));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("ERROR",t.getMessage());
+            }
+        });
     }
 
     @Override
@@ -89,6 +130,7 @@ public class ScanFragment extends Fragment {
             }
         }, ContextCompat.getMainExecutor(requireContext()));
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
