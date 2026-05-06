@@ -98,7 +98,7 @@ public class AddProductActivity extends AppCompatActivity {
             * We always run database queries on a different thread than the main thread to avoid crashing the app.
             * */
             Executor executor = Executors.newSingleThreadExecutor();
-            double finalPrice = price;
+            double finalPrice = (price*10)/100;
             executor.execute(() -> {
                 PantryItem newItem = new PantryItem(name, "", selectedExpiryDate, finalPrice);
                 db.pantryDao().insert(newItem);
