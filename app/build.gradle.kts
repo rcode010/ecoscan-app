@@ -70,4 +70,7 @@ dependencies {
 
 // for loading image url
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+// scan barcode
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
 }
