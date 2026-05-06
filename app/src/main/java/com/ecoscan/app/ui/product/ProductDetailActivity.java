@@ -1,6 +1,9 @@
 package com.ecoscan.app.ui.product;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,6 +54,23 @@ public class ProductDetailActivity extends AppCompatActivity {
         tvDateAdded.setText(formatDate(item.dateAdded));
         tvExpiryDate.setText(formatDate(item.expiryDate));
 
+        // Freshness Calculation
+        ProgressBar progressFreshness = findViewById(R.id.progress_freshness);
+        TextView tvFreshnessLabel = findViewById(R.id.tv_freshness_label);
+        calculateFreshness(item, progressFreshness, tvFreshnessLabel, statusDetailChip);
+
+        // Mark as Consumed button
+        MaterialButton btnConsumed = findViewById(R.id.btn_mark_consumed);
+        btnConsumed.setOnClickListener(v -> {
+            Executor executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+                item.isConsumed = true;
+                db.pantryDao().update(item);
+            });
+            Toast.makeText(this, "Great! Money saved: $" + item.price, Toast.LENGTH_SHORT).show();
+            finish();
+        });
+
         // Delete button
         MaterialButton btnDelete = findViewById(R.id.btn_delete);
         btnDelete.setOnClickListener(v -> {
@@ -62,6 +82,50 @@ public class ProductDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Product removed!", Toast.LENGTH_SHORT).show();
             finish();
         });
+    }
+
+    private void calculateFreshness(PantryItem item, ProgressBar progressBar, TextView label, Chip statusChip) {
+        long now = System.currentTimeMillis();
+        long totalDuration = item.expiryDate - item.dateAdded;
+        long remainingDuration = item.expiryDate - now;
+
+        int percentage;
+        if (now >= item.expiryDate) {
+            percentage = 0;
+        } else if (now <= item.dateAdded) {
+            percentage = 100;
+        } else {
+            percentage = (int) ((remainingDuration * 100) / totalDuration);
+        }
+
+        progressBar.setProgress(percentage);
+
+        // Update UI based on freshness
+        if (percentage > 70) {
+            label.setText("Fresh — " + percentage + "% fresh");
+            progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#52B788"))); // safe_green
+            statusChip.setText("Fresh");
+            statusChip.setChipBackgroundColorResource(R.color.safe_green);
+            statusChip.setTextColor(Color.WHITE);
+        } else if (percentage > 30) {
+            label.setText("Good — " + percentage + "% fresh");
+            progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#F4A261"))); // warning_yellow
+            statusChip.setText("Expiring Soon");
+            statusChip.setChipBackgroundColorResource(R.color.warning_yellow);
+            statusChip.setTextColor(Color.WHITE);
+        } else if (percentage > 0) {
+            label.setText("Use Soon — " + percentage + "% fresh");
+            progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#E63946"))); // expired_red
+            statusChip.setText("Critical");
+            statusChip.setChipBackgroundColorResource(R.color.expired_red);
+            statusChip.setTextColor(Color.WHITE);
+        } else {
+            label.setText("Expired — 0% fresh");
+            progressBar.setProgressTintList(ColorStateList.valueOf(Color.parseColor("#E63946")));
+            statusChip.setText("Expired");
+            statusChip.setChipBackgroundColorResource(R.color.expired_red);
+            statusChip.setTextColor(Color.WHITE);
+        }
     }
 
     private String formatDate(long date) { // 1112345

@@ -42,6 +42,7 @@ public class HomeFragment extends Fragment {
         long twoDaysFromNow = System.currentTimeMillis() + (2 * 24 * 60 * 60 * 1000);
         TextView totalItemsStat = view.findViewById(R.id.totalItemsStat);
         TextView expiringSoonStat = view.findViewById(R.id.expiringSoonStat);
+        TextView moneySavedStat = view.findViewById(R.id.moneySavedStat);
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_pantry);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -74,6 +75,14 @@ public class HomeFragment extends Fragment {
         db.pantryDao().getItemsExpiringSoon(twoDaysFromNow).observe(getViewLifecycleOwner(), items -> {
             if (items != null) {
                 setStatCardValue(expiringSoonStat, items.size());
+            }
+        });
+
+        db.pantryDao().getTotalMoneySaved().observe(getViewLifecycleOwner(), totalSaved -> {
+            if (totalSaved != null) {
+                moneySavedStat.setText("$" + String.format("%.2f", totalSaved));
+            } else {
+                moneySavedStat.setText("$0.00");
             }
         });
     }

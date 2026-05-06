@@ -10,7 +10,7 @@ import com.ecoscan.app.data.Pantry.PantryItem;
 import com.ecoscan.app.data.User.User;
 import com.ecoscan.app.data.User.UserDao;
 
-@Database(entities = {PantryItem.class, User.class}, version = 1, exportSchema = false)
+@Database(entities = {PantryItem.class, User.class}, version = 2, exportSchema = false)
 public abstract class EcoScanDatabase extends RoomDatabase {
 
     private static EcoScanDatabase instance;

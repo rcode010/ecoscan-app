@@ -232,16 +232,35 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- DELETE BUTTON -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_delete"
+            <!-- ACTION BUTTONS -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="Remove from Pantry"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:backgroundTint="@color/expired_red"
-                app:cornerRadius="16dp" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_mark_consumed"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="Mark as Consumed"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp"
+                    app:backgroundTint="@color/safe_green"
+                    app:cornerRadius="16dp"
+                    app:icon="@android:drawable/ic_input_add" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_delete"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="Remove from Pantry"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/expired_red"
+                    app:cornerRadius="16dp" />
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

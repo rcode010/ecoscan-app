@@ -12,7 +12,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.OptIn;
-import androidx.camera.core.*;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ExperimentalGetImage;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
@@ -25,6 +29,8 @@ import com.ecoscan.app.api.RetrofitClient;
 import com.ecoscan.app.ui.product.AddProductActivity;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.common.InputImage;
+
+import org.json.JSONObject;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -114,14 +120,14 @@ public class ScanFragment extends Fragment {
                     }
                 } else {
                     Toast.makeText(requireContext(), "Product not found", Toast.LENGTH_SHORT).show();
-                    isScanned = false; // allow scanning again
+                    isScanned = false;
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e("ERROR", t.getMessage());
-                isScanned = false; // allow scanning again on failure
+                isScanned = false;
             }
         });
     }
