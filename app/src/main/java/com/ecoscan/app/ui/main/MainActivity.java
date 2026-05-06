@@ -1,31 +1,31 @@
 package com.ecoscan.app.ui.main;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
-import com.ecoscan.app.api.ApiService;
-import com.ecoscan.app.api.RetrofitClient;
 import com.ecoscan.app.data.EcoScanDatabase;
 import com.ecoscan.app.data.User.User;
 import com.ecoscan.app.ui.profile.ProfileFragment;
 import com.ecoscan.app.R;
 import com.ecoscan.app.ui.scan.ScanFragment;
+import com.ecoscan.app.utils.NotificationHelper;
+import com.ecoscan.app.worker.ExpiryWorker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * MainActivity is a host that holds all fragments and their FrameLayout container.
@@ -41,14 +41,16 @@ public class MainActivity extends AppCompatActivity {
         // Create EcoScanUser if it doesn't exist at first startup
         insertUserIfNotExist();
 
+        // Initialize Notifications
+        NotificationHelper.createNotificationChannel(this);
+        requestNotificationPermission();
+        scheduleExpiryCheck();
+
         // Load HomeFragment by default
         loadFragment(new HomeFragment());
 
         // Set up bottom navigation menu with listeners
         setupBottomNavigation();
-
-
-
     }
 
     private void setupBottomNavigation() {
@@ -94,4 +96,26 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, fragment)
                 .commit();
     }
+
+    private void scheduleExpiryCheck() {
+        PeriodicWorkRequest expiryWorkRequest = new PeriodicWorkRequest.Builder(
+                ExpiryWorker.class,
+                24, TimeUnit.HOURS // Check once a day
+        ).build();
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "expiry_check",
+                ExistingPeriodicWorkPolicy.KEEP, // KEEP means if a work with the same name already exists, it will be kept and not replaced
+                expiryWorkRequest
+        );
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
+    }
+
 }
