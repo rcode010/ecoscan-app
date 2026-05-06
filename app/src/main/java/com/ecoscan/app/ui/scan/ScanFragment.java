@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ScanFragment extends Fragment {
+    Button button;
 
     private boolean isScanned = false;
 
@@ -55,6 +57,13 @@ public class ScanFragment extends Fragment {
         } else {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, 100);
         }
+
+
+        button = view.findViewById(R.id.btn_manual_entry);
+        button.setOnClickListener(t->{
+            Intent intent = new Intent(requireContext(), AddProductActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
