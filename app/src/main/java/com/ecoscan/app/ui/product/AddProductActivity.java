@@ -79,7 +79,7 @@ public class AddProductActivity extends AppCompatActivity {
             String priceStr = ((TextInputEditText)findViewById(R.id.et_price)).getText().toString().trim();
             double price = 0;
             try {
-                if (!priceStr.isEmpty()) price = Double.parseDouble(priceStr) ;
+                if (!priceStr.isEmpty()) price = Double.parseDouble(priceStr);
             } catch (NumberFormatException e) {
                 price = 0;
             }
@@ -98,7 +98,7 @@ public class AddProductActivity extends AppCompatActivity {
             * We always run database queries on a different thread than the main thread to avoid crashing the app.
             * */
             Executor executor = Executors.newSingleThreadExecutor();
-            double finalPrice = (price *10)/100;
+            double finalPrice = price;
             executor.execute(() -> {
                 PantryItem newItem = new PantryItem(name, "", selectedExpiryDate, finalPrice);
                 db.pantryDao().insert(newItem);

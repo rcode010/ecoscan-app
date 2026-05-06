@@ -10,29 +10,15 @@ import com.ecoscan.app.api.ApiService;
 import com.ecoscan.app.api.RetrofitClient;
 import com.ecoscan.app.data.EcoScanDatabase;
 import com.ecoscan.app.data.User.User;
-import com.ecoscan.app.model.ApiResponse;
 import com.ecoscan.app.ui.profile.ProfileFragment;
 import com.ecoscan.app.R;
 import com.ecoscan.app.ui.scan.ScanFragment;
-import com.ecoscan.app.utils.NotificationHelper;
-import com.ecoscan.app.worker.ExpiryWorker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.TimeUnit;
-
 import java.io.IOException;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -55,16 +41,12 @@ public class MainActivity extends AppCompatActivity {
         // Create EcoScanUser if it doesn't exist at first startup
         insertUserIfNotExist();
 
-        // Initialize Notifications
-        NotificationHelper.createNotificationChannel(this);
-        requestNotificationPermission();
-        scheduleExpiryCheck();
-
         // Load HomeFragment by default
         loadFragment(new HomeFragment());
 
         // Set up bottom navigation menu with listeners
         setupBottomNavigation();
+
 
 
     }
@@ -103,27 +85,6 @@ public class MainActivity extends AppCompatActivity {
                 db.userDao().insert(new User("EcoScan User"));
             }
         }));
-    }
-
-    private void scheduleExpiryCheck() {
-        PeriodicWorkRequest expiryWorkRequest = new PeriodicWorkRequest.Builder(
-                ExpiryWorker.class,
-                24, TimeUnit.HOURS // Check once a day
-        ).build();
-
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-                "expiry_check",
-                ExistingPeriodicWorkPolicy.KEEP,
-                expiryWorkRequest
-        );
-    }
-
-    private void requestNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
-            }
-        }
     }
 
     // Helper method to load fragments
