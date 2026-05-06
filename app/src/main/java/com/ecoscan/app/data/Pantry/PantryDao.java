@@ -36,4 +36,15 @@ public interface PantryDao {
     // Find item by barcode
     @Query("SELECT * FROM pantry_item WHERE barcode = :barcode LIMIT 1")
     PantryItem getItemByBarcode(String barcode);
+
+    // Get total money saved (sum of price for consumed items)
+    @Query("SELECT SUM(price) FROM pantry_item WHERE isConsumed = 1")
+    LiveData<Double> getTotalMoneySaved();
+
+    // Get total items tracked (not deleted/consumed, or maybe all?)
+    @Query("SELECT COUNT(*) FROM pantry_item")
+    LiveData<Integer> getTotalItemsTracked();
+
+    @Query("SELECT COUNT(*) FROM pantry_item WHERE isConsumed = 1")
+    LiveData<Integer> getConsumedItemsCount();
 }

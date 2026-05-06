@@ -33,13 +33,7 @@ public class AddProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
 
-
-
-
-
-
-
-            db = EcoScanDatabase.getInstance(this);
+        db = EcoScanDatabase.getInstance(this);
         etProductName = findViewById(R.id.et_product_name);
         etBarcode = findViewById(R.id.et_barcode);
         etExpiryDate = findViewById(R.id.et_expiry_date);
@@ -75,9 +69,6 @@ public class AddProductActivity extends AppCompatActivity {
             }
         }
 
-
-
-
         // Date picker on expiry field click
         etExpiryDate.setOnClickListener(v -> showDatePicker());
 
@@ -85,7 +76,13 @@ public class AddProductActivity extends AppCompatActivity {
         MaterialButton btnAdd = findViewById(R.id.btn_add_product);
         btnAdd.setOnClickListener(v -> {
             String name = etProductName.getText().toString().trim();
-//            String barcode = etBarcode.getText().toString().trim();
+            String priceStr = ((TextInputEditText)findViewById(R.id.et_price)).getText().toString().trim();
+            double price = 0;
+            try {
+                if (!priceStr.isEmpty()) price = Double.parseDouble(priceStr);
+            } catch (NumberFormatException e) {
+                price = 0;
+            }
 
             if (name.isEmpty()) {
                 etProductName.setError("Enter product name");
@@ -101,8 +98,9 @@ public class AddProductActivity extends AppCompatActivity {
             * We always run database queries on a different thread than the main thread to avoid crashing the app.
             * */
             Executor executor = Executors.newSingleThreadExecutor();
+            double finalPrice = price;
             executor.execute(() -> {
-                PantryItem newItem = new PantryItem(name, "", selectedExpiryDate);
+                PantryItem newItem = new PantryItem(name, "", selectedExpiryDate, finalPrice);
                 db.pantryDao().insert(newItem);
             });
 

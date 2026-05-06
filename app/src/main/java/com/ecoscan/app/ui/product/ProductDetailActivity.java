@@ -59,6 +59,18 @@ public class ProductDetailActivity extends AppCompatActivity {
         TextView tvFreshnessLabel = findViewById(R.id.tv_freshness_label);
         calculateFreshness(item, progressFreshness, tvFreshnessLabel, statusDetailChip);
 
+        // Mark as Consumed button
+        MaterialButton btnConsumed = findViewById(R.id.btn_mark_consumed);
+        btnConsumed.setOnClickListener(v -> {
+            Executor executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+                item.isConsumed = true;
+                db.pantryDao().update(item);
+            });
+            Toast.makeText(this, "Great! Money saved: $" + item.price, Toast.LENGTH_SHORT).show();
+            finish();
+        });
+
         // Delete button
         MaterialButton btnDelete = findViewById(R.id.btn_delete);
         btnDelete.setOnClickListener(v -> {

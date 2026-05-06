@@ -87,9 +87,10 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/tv_profile_money_saved"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$24"
+                        android:text="$0"
                         android:textSize="28sp"
                         android:textStyle="bold"
                         android:textColor="@color/primary" />
@@ -120,9 +121,10 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/tv_profile_items_tracked"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="12"
+                        android:text="0"
                         android:textSize="28sp"
                         android:textStyle="bold"
                         android:textColor="@color/primary" />
@@ -152,9 +154,10 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/tv_profile_food_saved"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3kg"
+                        android:text="0"
                         android:textSize="28sp"
                         android:textStyle="bold"
                         android:textColor="@color/primary" />
