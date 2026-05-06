@@ -93,7 +93,7 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- INFO CARDS ROW -->
+            <!-- INFO CARDS ROW — Date Added | Expiry Date | Price -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,9 +103,9 @@
                 <!-- Date Added -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
-                    android:layout_height="90dp"
+                    android:layout_height="110dp"
                     android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="6dp"
                     app:cardCornerRadius="16dp"
                     app:cardBackgroundColor="@color/card_white"
                     app:cardElevation="2dp">
@@ -115,39 +115,41 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:padding="12dp">
+                        android:padding="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="📅"
-                            android:textSize="24sp" />
+                            android:textSize="22sp" />
 
                         <TextView
                             android:id="@+id/tv_date_added"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Jan 10"
-                            android:textSize="13sp"
+                            android:textSize="12sp"
                             android:textStyle="bold"
-                            android:textColor="@color/text_dark" />
+                            android:textColor="@color/text_dark"
+                            android:gravity="center" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Added"
-                            android:textSize="11sp"
+                            android:textSize="10sp"
                             android:textColor="@color/text_grey" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Expiry Date -->
+                <!-- Expiry Date (editable) -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
-                    android:layout_height="90dp"
+                    android:layout_height="110dp"
                     android:layout_weight="1"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
                     app:cardCornerRadius="16dp"
                     app:cardBackgroundColor="@color/card_white"
                     app:cardElevation="2dp">
@@ -157,29 +159,105 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:padding="12dp">
+                        android:padding="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="⏰"
-                            android:textSize="24sp" />
+                            android:textSize="22sp" />
 
                         <TextView
                             android:id="@+id/tv_expiry_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Jan 17"
-                            android:textSize="13sp"
+                            android:textSize="12sp"
                             android:textStyle="bold"
-                            android:textColor="@color/text_dark" />
+                            android:textColor="@color/text_dark"
+                            android:gravity="center" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Expires"
-                            android:textSize="11sp"
+                            android:textSize="10sp"
                             android:textColor="@color/text_grey" />
+
+                        <!-- Edit Expiry Date button -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_edit_expiry"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="24dp"
+                            android:text="Edit"
+                            android:textSize="10sp"
+                            android:minHeight="0dp"
+                            android:paddingTop="0dp"
+                            android:paddingBottom="0dp"
+                            app:iconSize="12dp"
+                            app:icon="@android:drawable/ic_menu_edit"
+                            app:iconGravity="start"
+                            app:iconPadding="2dp" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Price (editable) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="110dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="@color/card_white"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="💰"
+                            android:textSize="22sp" />
+
+                        <TextView
+                            android:id="@+id/tv_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="$0.00"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_dark"
+                            android:gravity="center" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Price"
+                            android:textSize="10sp"
+                            android:textColor="@color/text_grey" />
+
+                        <!-- Edit Price button -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_edit_price"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="24dp"
+                            android:text="Edit"
+                            android:textSize="10sp"
+                            android:minHeight="0dp"
+                            android:paddingTop="0dp"
+                            android:paddingBottom="0dp"
+                            app:iconSize="12dp"
+                            app:icon="@android:drawable/ic_menu_edit"
+                            app:iconGravity="start"
+                            app:iconPadding="2dp" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
