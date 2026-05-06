@@ -18,13 +18,17 @@ public class PantryItem implements Parcelable {
     public long expiryDate;   // stored as timestamp (milliseconds)
     public long dateAdded;    // when you scanned it
     public boolean isExpired;
+    public double price;        // Added price
+    public boolean isConsumed;  // Added consumed status
 
-    public PantryItem(String itemName, String barcode, long expiryDate) {
+    public PantryItem(String itemName, String barcode, long expiryDate, double price) {
         this.itemName = itemName;
         this.barcode = barcode;
         this.expiryDate = expiryDate;
+        this.price = price;
         this.dateAdded = System.currentTimeMillis();
         this.isExpired = false;
+        this.isConsumed = false;
     }
 
     protected PantryItem(Parcel in) {
@@ -34,6 +38,8 @@ public class PantryItem implements Parcelable {
         expiryDate = in.readLong();
         dateAdded = in.readLong();
         isExpired = in.readByte() != 0;
+        price = in.readDouble();
+        isConsumed = in.readByte() != 0;
     }
 
     @Override
@@ -44,6 +50,8 @@ public class PantryItem implements Parcelable {
         parcel.writeLong(expiryDate);
         parcel.writeLong(dateAdded);
         parcel.writeByte((byte) (isExpired ? 1 : 0));
+        parcel.writeDouble(price);
+        parcel.writeByte((byte) (isConsumed ? 1 : 0));
     }
 
     public static final Creator<PantryItem> CREATOR = new Creator<PantryItem>() {
