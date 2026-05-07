@@ -18,6 +18,11 @@ public class NotificationHelper {
     public static final String CHANNEL_NAME = "Expiry Alerts";
     public static final String CHANNEL_DESC = "Notifications for products expiring soon";
 
+
+    public static final String CHANNEL_ID_2 = "tip_of_the_day";
+    public static final String CHANNEL_NAME_2 = "Tip of the day";
+    public static final String CHANNEL_DESC_2 = "tip of the day";
+
     public static void createNotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
@@ -27,9 +32,17 @@ public class NotificationHelper {
             );
             channel.setDescription(CHANNEL_DESC);
 
+            NotificationChannel channel_2 = new NotificationChannel(
+                    CHANNEL_ID_2,
+                    CHANNEL_NAME_2,
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel_2.setDescription(CHANNEL_DESC_2);
+
             NotificationManager manager = context.getSystemService(NotificationManager.class);
             if (manager != null) {
                 manager.createNotificationChannel(channel);
+                manager.createNotificationChannel(channel_2);
             }
         }
     }
