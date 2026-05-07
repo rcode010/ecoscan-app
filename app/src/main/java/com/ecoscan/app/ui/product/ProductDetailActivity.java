@@ -1,16 +1,12 @@
 package com.ecoscan.app.ui.product;
 
-import android.app.DatePickerDialog;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.InputType;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ecoscan.app.R;
@@ -20,7 +16,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.Executor;
@@ -74,14 +69,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Freshness
         calculateFreshness(item, progressFreshness, tvFreshnessLabel, statusDetailChip);
 
-        // Edit Expiry Date
-        MaterialButton btnEditExpiry = findViewById(R.id.btn_edit_expiry);
-        btnEditExpiry.setOnClickListener(v -> showDatePicker());
-
-        // Edit Price
-        MaterialButton btnEditPrice = findViewById(R.id.btn_edit_price);
-        btnEditPrice.setOnClickListener(v -> showPriceDialog());
-
         // Mark as Consumed
         MaterialButton btnConsumed = findViewById(R.id.btn_mark_consumed);
         btnConsumed.setOnClickListener(v -> {
@@ -102,70 +89,6 @@ public class ProductDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Product removed!", Toast.LENGTH_SHORT).show();
             finish();
         });
-    }
-
-    // Date Picker Dialog
-    private void showDatePicker() {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(item.expiryDate);
-
-        DatePickerDialog dialog = new DatePickerDialog(
-                this,
-                (view, year, month, dayOfMonth) -> {
-                    Calendar selected = Calendar.getInstance();
-                    selected.set(year, month, dayOfMonth, 0, 0, 0);
-                    selected.set(Calendar.MILLISECOND, 0);
-
-                    item.expiryDate = selected.getTimeInMillis();
-                    tvExpiryDate.setText(formatDate(item.expiryDate));
-
-                    // Recalculate freshness
-                    calculateFreshness(item, progressFreshness, tvFreshnessLabel, statusDetailChip);
-
-                    // Persist
-                    Executor executor = Executors.newSingleThreadExecutor();
-                    executor.execute(() -> db.pantryDao().update(item));
-
-                    Toast.makeText(this, "Expiry date updated!", Toast.LENGTH_SHORT).show();
-                },
-                cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH),
-                cal.get(Calendar.DAY_OF_MONTH)
-        );
-        dialog.show();
-    }
-
-    // Price Edit Dialog
-    private void showPriceDialog() {
-        EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        input.setHint("Enter price (e.g. 3.99)");
-        input.setText(String.format(Locale.getDefault(), "%.2f", item.price));
-        input.selectAll();
-        int padding = (int) (16 * getResources().getDisplayMetrics().density);
-        input.setPadding(padding, padding, padding, padding);
-
-        new AlertDialog.Builder(this)
-                .setTitle("Update Price")
-                .setView(input)
-                .setPositiveButton("Save", (dialog, which) -> {
-                    String raw = input.getText().toString().trim();
-                    if (raw.isEmpty()) return;
-                    try {
-                        double newPrice = Double.parseDouble(raw);
-                        item.price = newPrice;
-                        tvPrice.setText(String.format(Locale.getDefault(), "$%.2f", newPrice));
-
-                        Executor executor = Executors.newSingleThreadExecutor();
-                        executor.execute(() -> db.pantryDao().update(item));
-
-                        Toast.makeText(this, "Price updated!", Toast.LENGTH_SHORT).show();
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(this, "Invalid price value", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
     }
 
     // Freshness Calculation

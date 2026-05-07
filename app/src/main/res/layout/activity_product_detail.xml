@@ -184,22 +184,6 @@
                             android:textSize="10sp"
                             android:textColor="@color/text_grey" />
 
-                        <!-- Edit Expiry Date button -->
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_edit_expiry"
-                            style="@style/Widget.Material3.Button.TextButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="24dp"
-                            android:text="Edit"
-                            android:textSize="10sp"
-                            android:minHeight="0dp"
-                            android:paddingTop="0dp"
-                            android:paddingBottom="0dp"
-                            app:iconSize="12dp"
-                            app:icon="@android:drawable/ic_menu_edit"
-                            app:iconGravity="start"
-                            app:iconPadding="2dp" />
-
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -242,22 +226,6 @@
                             android:text="Price"
                             android:textSize="10sp"
                             android:textColor="@color/text_grey" />
-
-                        <!-- Edit Price button -->
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_edit_price"
-                            style="@style/Widget.Material3.Button.TextButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="24dp"
-                            android:text="Edit"
-                            android:textSize="10sp"
-                            android:minHeight="0dp"
-                            android:paddingTop="0dp"
-                            android:paddingBottom="0dp"
-                            app:iconSize="12dp"
-                            app:icon="@android:drawable/ic_menu_edit"
-                            app:iconGravity="start"
-                            app:iconPadding="2dp" />
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
