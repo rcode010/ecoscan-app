@@ -72,6 +72,12 @@ public class AddProductActivity extends AppCompatActivity {
         // Date picker on expiry field click
         etExpiryDate.setOnClickListener(v -> showDatePicker());
 
+        // Camera icon / Scan card click listener
+        findViewById(R.id.card_scan_barcode).setOnClickListener(v -> {
+            // Simply finish this activity to return to the ScanFragment
+            finish();
+        });
+
         // Add button
         MaterialButton btnAdd = findViewById(R.id.btn_add_product);
         btnAdd.setOnClickListener(v -> {
@@ -97,10 +103,11 @@ public class AddProductActivity extends AppCompatActivity {
             * Executor is a thread used to run database queries as mentioned in MainActivity.java
             * We always run database queries on a different thread than the main thread to avoid crashing the app.
             * */
+            double finalPrice = price;
+            String barcode = etBarcode.getText().toString().trim();
             Executor executor = Executors.newSingleThreadExecutor();
-            double finalPrice = (price*10)/100;
             executor.execute(() -> {
-                PantryItem newItem = new PantryItem(name, "", selectedExpiryDate, finalPrice);
+                PantryItem newItem = new PantryItem(name, barcode, selectedExpiryDate, finalPrice);
                 db.pantryDao().insert(newItem);
             });
 

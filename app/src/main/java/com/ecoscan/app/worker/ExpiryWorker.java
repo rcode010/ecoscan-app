@@ -13,7 +13,6 @@ import com.ecoscan.app.utils.NotificationHelper;
 import java.util.List;
 
 public class ExpiryWorker extends Worker {
-
     public ExpiryWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
@@ -24,10 +23,14 @@ public class ExpiryWorker extends Worker {
         Context context = getApplicationContext();
         EcoScanDatabase db = EcoScanDatabase.getInstance(context);
 
+        // 1. Calculate two days from now
         long twoDaysFromNow = System.currentTimeMillis() + (2 * 24 * 60 * 60 * 1000);
+
+        // 2. Get all items that are expiring soon
         List<PantryItem> expiringSoon = db.pantryDao().getItemsExpiringSoonSync(twoDaysFromNow);
 
         if (expiringSoon != null && !expiringSoon.isEmpty()) {
+            // 3. Send notifications for each item
             for (PantryItem item : expiringSoon) {
                 NotificationHelper.sendExpiryNotification(context, item.itemName, item.id);
             }

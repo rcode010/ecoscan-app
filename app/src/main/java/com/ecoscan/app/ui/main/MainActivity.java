@@ -100,12 +100,12 @@ public class MainActivity extends AppCompatActivity {
     private void scheduleExpiryCheck() {
         PeriodicWorkRequest expiryWorkRequest = new PeriodicWorkRequest.Builder(
                 ExpiryWorker.class,
-                24, TimeUnit.HOURS // Check once a day
+                24, TimeUnit.HOURS // Check once a day (WorkManager minimum is 15 mins)
         ).build();
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
                 "expiry_check",
-                ExistingPeriodicWorkPolicy.KEEP, // KEEP means if a work with the same name already exists, it will be kept and not replaced
+                ExistingPeriodicWorkPolicy.REPLACE, // Changed from KEEP to REPLACE to ensure changes take effect
                 expiryWorkRequest
         );
     }
