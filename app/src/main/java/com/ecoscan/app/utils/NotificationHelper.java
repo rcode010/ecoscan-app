@@ -28,9 +28,11 @@ public class NotificationHelper {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
                     CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_DEFAULT
+                    NotificationManager.IMPORTANCE_HIGH
             );
             channel.setDescription(CHANNEL_DESC);
+            channel.enableLights(true);
+            channel.enableVibration(true);
 
             NotificationChannel channel_2 = new NotificationChannel(
                     CHANNEL_ID_2,
@@ -48,6 +50,14 @@ public class NotificationHelper {
     }
 
     public static void sendExpiryNotification(Context context, String itemName, int notificationId) {
+        /* *
+         * The following three lines determine what happens when the user taps the notification.
+         *
+         * It should open the app and take the user to the main activity.
+         * The user may not always tap the notification that's why we use pending intents.
+         *
+         * Pending intents hold onto the intent and don't fire immediately until later
+         * */
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
@@ -55,10 +65,12 @@ public class NotificationHelper {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications)
                 .setContentTitle("Expiring Soon!")
-                .setContentText(itemName + " will expire in 2 days. Use it soon to save money!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentText(itemName + " will expire soon. Use it to save money!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
+                .setAutoCancel(true)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         try {

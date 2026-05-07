@@ -21,8 +21,8 @@ public interface PantryDao {
     @Delete
     void delete(PantryItem item);
 
-    // Get all items ordered by expiry date (soonest first)
-    @Query("SELECT * FROM pantry_item ORDER BY expiryDate ASC")
+    // Get all active items (not consumed) ordered by expiry date
+    @Query("SELECT * FROM pantry_item WHERE isConsumed = 0 ORDER BY expiryDate ASC")
     LiveData<List<PantryItem>> getAllItems();
 
     // Get items expiring within 2 days (for notifications)
