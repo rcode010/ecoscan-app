@@ -26,8 +26,8 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
     }
 
     public void updateItems(List<PantryItem> items) {
-        this.items = items;
-        notifyDataSetChanged();
+        this.items = items;     // update the list
+        notifyDataSetChanged(); // Tell the recycler view about it
     }
 
     // The onCreateViewHolder() method is called when the RecyclerView needs to show a new ViewHolder to represent an item on the UI.
@@ -55,7 +55,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.ViewHolder
         long diff = item.expiryDate - now;
         long daysLeft = TimeUnit.MILLISECONDS.toDays(diff);
 
-        if (daysLeft < 0) {
+        if (daysLeft <= 0) {
             holder.chipExpiry.setText("Expired");
             holder.chipExpiry.setChipBackgroundColorResource(R.color.expired_red);
             holder.expiryIndicator.setBackgroundColor(Color.parseColor("#E63946"));

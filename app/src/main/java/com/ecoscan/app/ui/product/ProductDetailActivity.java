@@ -30,7 +30,6 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private PantryItem item;
     private EcoScanDatabase db;
-
     private TextView tvExpiryDate;
     private TextView tvPrice;
     private ProgressBar progressFreshness;
@@ -75,15 +74,15 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Freshness
         calculateFreshness(item, progressFreshness, tvFreshnessLabel, statusDetailChip);
 
-        // ── Edit Expiry Date ──────────────────────────────────────────────────
+        // Edit Expiry Date
         MaterialButton btnEditExpiry = findViewById(R.id.btn_edit_expiry);
         btnEditExpiry.setOnClickListener(v -> showDatePicker());
 
-        // ── Edit Price ────────────────────────────────────────────────────────
+        // Edit Price
         MaterialButton btnEditPrice = findViewById(R.id.btn_edit_price);
         btnEditPrice.setOnClickListener(v -> showPriceDialog());
 
-        // ── Mark as Consumed ──────────────────────────────────────────────────
+        // Mark as Consumed
         MaterialButton btnConsumed = findViewById(R.id.btn_mark_consumed);
         btnConsumed.setOnClickListener(v -> {
             Executor executor = Executors.newSingleThreadExecutor();
@@ -95,7 +94,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             finish();
         });
 
-        // ── Delete ────────────────────────────────────────────────────────────
+        // Delete
         MaterialButton btnDelete = findViewById(R.id.btn_delete);
         btnDelete.setOnClickListener(v -> {
             Executor executor = Executors.newSingleThreadExecutor();
@@ -105,7 +104,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
     }
 
-    // ── Date Picker Dialog ────────────────────────────────────────────────────
+    // Date Picker Dialog
     private void showDatePicker() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(item.expiryDate);
@@ -136,7 +135,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    // ── Price Edit Dialog ─────────────────────────────────────────────────────
+    // Price Edit Dialog
     private void showPriceDialog() {
         EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -169,10 +168,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                 .show();
     }
 
-    // ── Freshness Calculation ─────────────────────────────────────────────────
+    // Freshness Calculation
     private void calculateFreshness(PantryItem item, ProgressBar progressBar,
                                     TextView label, Chip statusChip) {
-        long now = System.currentTimeMillis();
+        long now               = System.currentTimeMillis();
         long totalDuration     = item.expiryDate - item.dateAdded;
         long remainingDuration = item.expiryDate - now;
 
